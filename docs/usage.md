@@ -7,6 +7,7 @@ cd common && fis3 release -d ../output
 ```bash
 fis3 server start -p 8888 --type smarty --rewrite
 # fis3 release -wL #监控文件变化方式发布，当前进程不退出
+fis3 server clean #清理发布目录
 fis3 release -r common
 cd first
 fis3 release
