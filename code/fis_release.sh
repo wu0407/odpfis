@@ -1,8 +1,4 @@
 #!/bin/env bash
-cd common
-fis3 release
-cd ..
+fis3 release -r library/fe/common
+fis3 release -r demo/fe
 
-cd first
-fis3 release
-cd ..

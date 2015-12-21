@@ -1,5 +1,5 @@
 fis.require('smarty')(fis);
 fis.set('namespace', 'demo');
 
-require('../deploy.js');
+require('../../library/fe/deploy.js');
 
