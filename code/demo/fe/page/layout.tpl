@@ -9,11 +9,11 @@
 
   {%body%}
    <div id="container">
-      {%widget name="first:widget/header/header.tpl"%}
+      {%widget name="demo:widget/header/header.tpl"%}
       <div class="main">
         {%block name="main"%}{%/block%}
       </div>
-      {%widget name="first:widget/footer/footer.tpl"%}
+      {%widget name="demo:widget/footer/footer.tpl"%}
     </div>
   {%/body%}
 
