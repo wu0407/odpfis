@@ -1,52 +1,63 @@
 
 
 fis.media('dev').match('*.{js,css,png}', {
-	optimizer:null
+    optimizer:null
 });
 
 var MACHINE_CONFIG = {
-		jiangfuquan: {
-			machine: 'http://cp01-rdqa-dev337.cp01.baidu.com:8899/',
-			path: '/home/users/jiangfuquan/odp3/'
-		}
+	jiangfuquan: {
+		machine: 'http://cp01-rdqa-dev337.cp01.baidu.com:8899/',
+		//path: '/home/users/jiangfuquan/odp3/'
+		path: '/home/users/jiangfuquan/testrelease'
+	}
 };
-
 
 var namespace = fis.get('namespace');
 
 var deployTemplate = function (target) {
-	return [
-	{
-		receiver: MACHINE_CONFIG[target].machine + 'receiver.php',
-		from: '/template/' + namespace,
-		subOnly: true,
-		to: MACHINE_CONFIG[target].path + 'template/' + namespace 
-	},
-	{
-	        receiver: MACHINE_CONFIG[target].receiver,
-		from: '/static/' + namespace,
-		subOnly: true,
-		to: MACHINE_CONFIG[target].path + 'webroot/static/' + namespace
-	},
-	{
-	 	receiver: MACHINE_CONFIG[target].receiver,
-	 	from: '/plugin',
-	 	subOnly: true,
-	 	to: MACHINE_CONFIG[target].path + 'php/phplib/ext/smarty/baiduplugins'
-	},
-	{
-		receiver: MACHINE_CONFIG[target].receiver,
-	 	from: '/config',
-	 	subOnly: true,
-	 	to: MACHINE_CONFIG[target].path + 'data/smarty/config'
-	} 
-	];
+    return {
+        receiver: MACHINE_CONFIG[target].machine + 'receiver.php',
+        to: MACHINE_CONFIG[target].path
+    };
 }
+var matchRules = {
+    '*': {
+        release: '/webroot/static/${namespace}/$0'
+    },
+    '/(**.tpl)': {
+        release: '/template/${namespace}/$1'
+    },
+    '/{smarty.conf,domain.conf,**.php}': {
+        release: '/php/phplib/ext/smarty/baiduplugins/$0'
+    },
+    '/plugin/(**)': {
+        release: '/php/phplib/ext/smarty/baiduplugins/$1'
+    },
+    'server.conf': {
+        release: '/tmp/${namespace}.conf'
+    },
+    '/static/(**)': {
+        release: '/webroot/static/${namespace}/$1'
+    },
+    '/(test)/(**)': {
+        release: '/tmp/$1/${namespace}/$2'
+    },
+    '/(config)/(**)': {
+        release: '/data/smarty/$1/${namespace}/$2'
+    },
+    '${namespace}-map.json': { 
+        release: '/data/smarty/config/$0' 
+    }, 
+    '*.sh': { 
+        release: '/deletefiles/$0' 
+    }
+}; 
 
 for (var target in MACHINE_CONFIG) {
-
-fis.media(target).match('*', {
-	deploy: fis.plugin('http-push', deployTemplate(target))
-});
-
+    for (var rule in matchRules){
+        fis.media(target).match(rule, {
+            deploy: fis.plugin('http-push', deployTemplate(target)),
+            release: matchRules[rule].release
+        });
+    }
 }

@@ -4,6 +4,3 @@ fis.set('namespace', 'common');
 
 require('../deploy.js');
 
-
-
-
