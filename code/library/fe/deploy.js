@@ -4,11 +4,20 @@ fis.media('dev').match('*.{js,css,png}', {
     optimizer:null
 });
 
+//开启组件同名依赖
+fis.match('/widget/**', {
+    useSameNameRequire: true
+});
+
+fis.match('*.{tpl,js,php}', {
+    useSameNameRequire: true
+});
+
 var MACHINE_CONFIG = {
 	jiangfuquan: {
 		machine: 'http://cp01-rdqa-dev337.cp01.baidu.com:8899/',
-		//path: '/home/users/jiangfuquan/odp3/'
-		path: '/home/users/jiangfuquan/testrelease'
+		path: '/home/users/jiangfuquan/odp3/'
+		//path: '/home/users/jiangfuquan/testrelease'
 	}
 };
 
